@@ -7,16 +7,24 @@ server s1 {
 
 varnish v1 -vcl+backend {
 	import cowsay from "${vmod_topbuild}/src/.libs/libvmod_cowsay.so";
-
-	sub vcl_deliver {
-		set resp.http.hello = cowsay.hello("World");
+	sub vcl_recv {
+	    if (req.url ~ "/gimmethecow") {
+	    	return(synth(700, "OK"));
+		}
 	}
+
+	sub vcl_synth {
+	    if (resp.status == 700) {
+	       set resp.status = 200;
+	       set resp.http.Content-Type = "text/plain; charset=utf-8";
+	       synthetic(cowsay.cowsay_synth());
+	       return (deliver);
+	       }
+	} 
+
 } -start
 
 client c1 {
-	txreq -url "/"
+	txreq -url "/gimmethecow"
 	rxresp
-	expect resp.http.hello == "Hello, World"
-}
-
-client c1 -run
+} -run

@@ -21,7 +21,8 @@ You can even have links and lists in here:
 The init-function declared next does not have documentation.
 
 $Init init_function
-$Function STRING hello(STRING)
+
+$Function STRING cowsay_synth()
 
 The different functions provided by the VMOD should also have their own
 embedded documentation. This section is for the hello() function.
