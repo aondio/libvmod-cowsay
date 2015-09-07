@@ -1,5 +1,5 @@
 ============
-vmod_example
+vmod_cowsay
 ============
 
 ----------------------
@@ -13,7 +13,7 @@ Varnish Example Module
 SYNOPSIS
 ========
 
-import example;
+import cowsay;
 
 DESCRIPTION
 ===========
@@ -39,7 +39,7 @@ Description
 Example
         ::
 
-                set resp.http.hello = example.hello("World");
+                set resp.http.hello = cowsay.hello("World");
 
 INSTALLATION
 ============
@@ -58,7 +58,7 @@ Usage::
 
 If you have installed Varnish to a non-standard directory, call
 ``autogen.sh`` and ``configure`` with ``PKG_CONFIG_PATH`` pointing to
-the appropriate path. For example, when varnishd configure was called
+the appropriate path. For cowsay, when varnishd configure was called
 with ``--prefix=$PREFIX``, use
 
  PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig
@@ -73,11 +73,11 @@ Make targets:
 
 In your VCL you could then use this vmod along the following lines::
 
-        import example;
+        import cowsay;
 
         sub vcl_deliver {
                 # This sets resp.http.hello to "Hello, World"
-                set resp.http.hello = example.hello("World");
+                set resp.http.hello = cowsay.hello("World");
         }
 
 COMMON PROBLEMS
