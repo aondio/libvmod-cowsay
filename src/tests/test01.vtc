@@ -1,4 +1,4 @@
-varnishtest "Test cowsay vmod"
+varnishtest "Test cowsay header"
 
 server s1 {
        rxreq
@@ -9,19 +9,13 @@ varnish v1 -vcl+backend {
 	import cowsay from "${vmod_topbuild}/src/.libs/libvmod_cowsay.so";
 	sub vcl_recv {
 	    if (req.url ~ "/gimmethecow") {
-	    	return(synth(700, "OK"));
-		}
+	       	set req.http.x-cow = cowsay.cowsay_header();
+	    	}
 	}
 
-	sub vcl_synth {
-	    if (resp.status == 700) {
-	       set resp.status = 200;
-	       set resp.http.Content-Type = "text/plain; charset=utf-8";
-	       synthetic(cowsay.cowsay_synth());
-	       return (deliver);
-	       }
-	} 
-
+	sub vcl_deliver {
+	    	set resp.http.x-cow = req.http.x-cow;
+	}
 } -start
 
 client c1 {

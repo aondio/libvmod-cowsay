@@ -23,6 +23,7 @@ The init-function declared next does not have documentation.
 $Init init_function
 
 $Function STRING cowsay_synth()
-
+$Function STRING cowsay_header()
+$Function STRING cowsay_friends(STRING,STRING)
 The different functions provided by the VMOD should also have their own
 embedded documentation. This section is for the hello() function.

@@ -1,0 +1,33 @@
+varnishtest "Test cowsay synth"
+
+server s1 {
+       rxreq
+       txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import cowsay from "${vmod_topbuild}/src/.libs/libvmod_cowsay.so";
+	
+	sub vcl_recv {
+		if (req.url ~ "/gimmethecow") {
+			if (req.url ~ "/cowsay") {
+				return(synth(700, "OK"));
+			}
+		}
+	}
+
+	sub vcl_synth {
+		if (resp.status == 700) {
+			set resp.status = 200;
+			set resp.http.Content-Type = "text/plain; charset=utf-8";
+			synthetic(cowsay.cowsay_friends("bunny", "ciao"));
+			return (deliver);
+			}
+		}
+
+} -start
+
+client c1 {
+	txreq -url "/gimmethecow"
+	rxresp
+} -run
