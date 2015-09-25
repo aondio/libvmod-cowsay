@@ -18,12 +18,17 @@ You can even have links and lists in here:
 * https://github.com/varnish/libvmod-cowsay/
 * https://www.varnish-cache.org/
 
-The init-function declared next does not have documentation.
-
+The init-function declared next does not need documentation.
 $Init init_function
 
-$Function STRING cowsay_synth()
 $Function STRING cowsay_header()
-$Function STRING cowsay_friends(STRING,STRING)
-The different functions provided by the VMOD should also have their own
-embedded documentation. This section is for the hello() function.
+	This function returns a cow header, it is available
+	from every vcl subruotines.
+
+$Function STRING cowsay_synth()
+	This function returs a cow as response body, created as
+	synthetic object.
+
+$Function STRING cowsay_friends(STRING, STRING)
+	This functions let's you decide if you want a cow or a bunny
+	and what you want them to "say".
