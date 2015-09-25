@@ -7,6 +7,11 @@
 #include "vcc_if.h"
 char *cow;
 
+/* The init function is used to init variables or global state you want to be
+   available for all the time the vcl is loaded. If you have stateless
+   functions you don't have to care about this function
+*/
+
 int
 init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
 {
@@ -17,7 +22,8 @@ init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
 	    " (__)\\       )\\/\\\n"
 	    "      ||----w |\n"
 	    "      ||     ||\n";
-	VSL(SLT_Debug, 0, "Init_function: %s ", cow);
+	/* this 'cow' is now available for every other functions that will
+	   be defined in this vmod */
 	return (0);
 }
 
@@ -26,27 +32,46 @@ vmod_cowsay_header(VRT_CTX)
 {
 	char *p;
 	unsigned u, v;
-
-	u = WS_Reserve(ctx->ws, 0); /* Reserve some work space */
-	p = ctx->ws->f;		/* Front of workspace area */
+	/* Reserve some work space, Varnish need to know the VMOD is
+	   going to do something and it needs memory for it */
+	u = WS_Reserve(ctx->ws, 0);
+        /* We set a ponter to the front of the workspace area we have been
+	   assigned by varnish */
+	p = ctx->ws->f;
+	/* now we can actually use the workspace we reserved and
+	   we write the 'cow' on it*/
 	v = snprintf(p, u, "%s", cow);
 	v++;
 	if (v > u) {
-		/* No space, reset and leave */
+        /* If the reserved workspace was not enough for what we planned
+	   to do, then we release it all and return NULL, this means
+	   "Sorry, Varnish doesn't have enough space for what you want to
+	   do, try to bump the workspace" */
 		WS_Release(ctx->ws, 0);
 		return (NULL);
 	}
-	/* Update work space with what we've used */
+	/* If we reach this point it means everything went as expected
+	   and we can update workspace with what we've used and give the rest
+	   back to varnish */
 	WS_Release(ctx->ws, v);
+	/* This 'p' pointer is now ponting to the very beginning of the
+	   workspace we reserved */
 	return (p);
 }
 
 VCL_STRING
 vmod_cowsay_synth(VRT_CTX)
 {
+	/* This vmod functions show you how to create response bodies
+	   intended as synthetic objects. This functions must be called
+	   from vcl_synth and doesn't make any sense if called from any
+	   other vcl subroutines. Give a look at the VCL workflow */
+
         unsigned  u;
         struct vsb *vsb;
         u = WS_Reserve(ctx->ws, 0);
+	/* vsb.h is a very nice varnish library for manipulating strings,
+	   use it instead of the canonical string libraries  */
         vsb = VSB_new(NULL, ctx->ws->f, u, VSB_AUTOEXTEND);
 	VSB_printf(vsb, "** body **\n");
 	VSB_cat(vsb, cow);
@@ -55,7 +80,7 @@ vmod_cowsay_synth(VRT_CTX)
         return (vsb->s_buf);
 }
 
-
+/* This is more advanced and complete example based on the previous function */
 VCL_STRING
 vmod_cowsay_friends(VRT_CTX, VCL_STRING animal, VCL_STRING talk)
 {
