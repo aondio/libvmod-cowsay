@@ -9,7 +9,7 @@ varnish v1 -vcl+backend {
 	import cowsay from "${vmod_topbuild}/src/.libs/libvmod_cowsay.so";
 	
 	sub vcl_recv {
-		if (req.url ~ "/cowsay-friends") {
+		if (req.url ~ "/cowsay") {
 			return(synth(700, "OK"));
 		}
 	}
@@ -26,6 +26,6 @@ varnish v1 -vcl+backend {
 } -start
 
 client c1 {
-	txreq -url "/cowsay-friends"
+	txreq -url "/cowsay"
 	rxresp
 } -run

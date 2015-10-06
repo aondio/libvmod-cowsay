@@ -36,6 +36,7 @@ $Function STRING cowsay_vsb()
 	HTTP message bodies in vcl_synth
 
 $Function STRING cowsay_friends(STRING, STRING)	     
+
         Returns a particular animal ASCII picture that says a message.
 	The first argument is the animal figure, and the second is the
 	message to be said.  This function uses the Varnish String
