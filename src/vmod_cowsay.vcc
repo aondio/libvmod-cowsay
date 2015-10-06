@@ -21,14 +21,24 @@ You can even have links and lists in here:
 The init-function declared next does not need documentation.
 $Init init_function
 
-$Function STRING cowsay_header()
-	This function returns a cow header, it is available
-	from every vcl subruotines.
+$Function STRING cowsay_canonical()
 
-$Function STRING cowsay_synth()
-	This function returs a cow as response body, created as
-	synthetic object.
+	Returns cowsay ASCII picture using canonical string libraries.
+	The output of this function is to be assigned to: 1) HTTP
+	header fields in vcl_recv and vcl_deliver, or 2) HTTP message
+	bodies in vcl_synth
 
-$Function STRING cowsay_friends(STRING, STRING)
-	This functions let's you decide if you want a cow or a bunny
-	and what you want them to "say".
+$Function STRING cowsay_vsb()
+
+	Returns cowsay ASCII picture using the Varnish String Buffer
+	(VSB) library.  The output of this function is to be assigned
+	to: 1) HTTP header fields in vcl_recv and vcl_deliver, or 2)
+	HTTP message bodies in vcl_synth
+
+$Function STRING cowsay_friends(STRING, STRING)	     
+        Returns a particular animal ASCII picture that says a message.
+	The first argument is the animal figure, and the second is the
+	message to be said.  This function uses the Varnish String
+	Buffer (VSB) library and its output is to be assigned to: 1)
+	HTTP header fields in vcl_recv and vcl_deliver, or 2) HTTP
+	message bodies in vcl_synth

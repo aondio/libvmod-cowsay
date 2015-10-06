@@ -28,7 +28,7 @@ init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
 }
 
 VCL_STRING
-vmod_cowsay_header(VRT_CTX)
+vmod_cowsay_canonical(VRT_CTX)
 {
 	char *p;
 	unsigned u, v;
@@ -60,17 +60,15 @@ vmod_cowsay_header(VRT_CTX)
 }
 
 VCL_STRING
-vmod_cowsay_synth(VRT_CTX)
+vmod_cowsay_vsb(VRT_CTX)
 {
-	/* This vmod functions show you how to create response bodies
-	   intended as synthetic objects. This functions must be called
-	   from vcl_synth and doesn't make any sense if called from any
-	   other vcl subroutines. Give a look at the VCL workflow */
+	/* This VMOD function shows you how to create response bodies
+	   intended as synthetic objects. */
 
         unsigned  u;
         struct vsb *vsb;
         u = WS_Reserve(ctx->ws, 0);
-	/* vsb.h is a very nice varnish library for manipulating strings,
+	/* vsb.h is a very useful varnish library for manipulating strings,
 	   use it instead of the canonical string libraries  */
         vsb = VSB_new(NULL, ctx->ws->f, u, VSB_AUTOEXTEND);
 	VSB_printf(vsb, "** body **\n");

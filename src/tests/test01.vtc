@@ -9,7 +9,7 @@ varnish v1 -vcl+backend {
 	import cowsay from "${vmod_topbuild}/src/.libs/libvmod_cowsay.so";
 	sub vcl_recv {
 	    if (req.url ~ "/gimmethecow") {
-	       	set req.http.x-cow = cowsay.cowsay_header();
+	       	set req.http.x-cow = cowsay.cowsay_canonical();
 	    	}
 	}
 
