@@ -40,7 +40,7 @@ vmod_cowsay_canonical(VRT_CTX)
 	p = ctx->ws->f;
 	/* now we can actually use the workspace we reserved and
 	   we write the 'cow' on it*/
-	v = snprintf(p, u, "%s", cow);
+	v = snprintf(p, u, "%s", "Cowsay: Hello World!");
 	v++;
 	if (v > u) {
         /* If the reserved workspace was not enough for what we planned
@@ -71,7 +71,7 @@ vmod_cowsay_vsb(VRT_CTX)
 	/* vsb.h is a very useful varnish library for manipulating strings,
 	   use it instead of the canonical string libraries  */
         vsb = VSB_new(NULL, ctx->ws->f, u, VSB_AUTOEXTEND);
-	VSB_printf(vsb, "** body **\n");
+	VSB_printf(vsb, "** mybody **");
 	VSB_cat(vsb, cow);
         VSB_finish(vsb);
         WS_Release(ctx->ws, VSB_len(vsb) + 1);

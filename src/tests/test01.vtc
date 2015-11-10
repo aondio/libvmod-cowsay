@@ -21,4 +21,5 @@ varnish v1 -vcl+backend {
 client c1 {
 	txreq -url "/cowsay"
 	rxresp
+	expect resp.http.x-cow == "Cowsay: Hello World!"
 } -run

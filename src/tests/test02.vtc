@@ -28,4 +28,11 @@ varnish v1 -vcl+backend {
 client c1 {
 	txreq -url "/cowsay"
 	rxresp
+        expect resp.body == {** mybody **
+ ^__^
+ (oo)\_______
+ (__)\       )\/\
+      ||----w |
+      ||     ||
+}
 } -run
