@@ -1,10 +1,9 @@
-============
-vmod_cowsay
-============
+=============
+ Cowsay VMOD
+=============
 
-Private: don't read.
+This VMOD aims at showing you how to write your own VMOD.
+Step by step documentation to develop this VMOD is in the Varnish Book http://info.varnish-software.com/the-varnish-book.
 
-You read, shame on you!
-
-TODO: good documentation on how to make a VMOD.
-
+Documentation on how to use this VMOD is in the man page of the VMOD, which is installed after you build this VMOD.
+The man page documentation is extracted from ``src/vmod_cowsay.vcc``.
