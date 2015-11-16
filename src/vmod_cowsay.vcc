@@ -18,7 +18,6 @@ You can even have links and lists in here:
 * https://github.com/varnish/libvmod-cowsay/
 * https://www.varnish-cache.org/
 
-The init-function declared next does not need documentation.
 $Init init_function
 
 $Function STRING cowsay_canonical()
@@ -36,6 +35,7 @@ $Function STRING cowsay_vsb()
 	HTTP message bodies in vcl_synth
 
 $Function STRING cowsay_friends(STRING, STRING)	     
+
         Returns a particular animal ASCII picture that says a message.
 	The first argument is the animal figure, and the second is the
 	message to be said.  This function uses the Varnish String

@@ -8,7 +8,7 @@ server s1 {
 varnish v1 -vcl+backend {
 	import cowsay from "${vmod_topbuild}/src/.libs/libvmod_cowsay.so";
 	sub vcl_recv {
-	    if (req.url ~ "/gimmethecow") {
+	    if (req.url ~ "/cowsay") {
 	       	set req.http.x-cow = cowsay.cowsay_canonical();
 	    	}
 	}
@@ -19,6 +19,7 @@ varnish v1 -vcl+backend {
 } -start
 
 client c1 {
-	txreq -url "/gimmethecow"
+	txreq -url "/cowsay"
 	rxresp
+	expect resp.http.x-cow == "Cowsay: Hello World!"
 } -run

@@ -4,8 +4,8 @@
 char *cat;
 
 char* baby_bunny() {
-	cat = "  (\\/)\n"
-	      "  (..) \n"
-	      " (\")(\") \n ";
+	cat = " (\\/)\n"
+	      " (..)\n"
+	      "(\")(\")\n";
 	    return cat;
 }

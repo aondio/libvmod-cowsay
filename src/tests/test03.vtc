@@ -9,7 +9,7 @@ varnish v1 -vcl+backend {
 	import cowsay from "${vmod_topbuild}/src/.libs/libvmod_cowsay.so";
 	
 	sub vcl_recv {
-		if (req.url ~ "/cowsay-friends") {
+		if (req.url ~ "/cowsay" || req.url ~ "/bunny") {
 			return(synth(700, "OK"));
 		}
 	}
@@ -18,14 +18,36 @@ varnish v1 -vcl+backend {
 		if (resp.status == 700) {
 			set resp.status = 200;
 			set resp.http.Content-Type = "text/plain; charset=utf-8";
-			synthetic(cowsay.cowsay_friends("bunny", "ciao"));
+                        if (req.url ~ "/cowsay"){
+			    synthetic(cowsay.cowsay_friends("cow", "moo"));
+                        }
+                        if (req.url ~ "/bunny"){
+			    synthetic(cowsay.cowsay_friends("bunny", "Varnish"));
+                        }
 			return (deliver);
 			}
 		}
-
 } -start
 
 client c1 {
-	txreq -url "/cowsay-friends"
+	txreq -url "/cowsay"
 	rxresp
+        expect resp.body == {** moo **
+
+ ^__^
+ (oo)\_______
+ (__)\       )\/\
+      ||----w |
+      ||     ||
+}
+} -run
+
+client c2 {
+	txreq -url "/bunny"
+	rxresp
+        expect resp.body == {** Varnish **
+ (\/)
+ (..)
+(")(")
+}
 } -run
